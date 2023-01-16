@@ -39,16 +39,6 @@ dockers:
   - --label=org.opencontainers.image.revision={{ .FullCommit }}
   - --label=org.opencontainers.image.licenses=Apache-2.0
 
-nfpms:
-- maintainer: Achmad Irianto Eka Putra <ryanbekhen.official@gmail.com>
-  description: A lightweight application serving frontend applications
-  homepage: https://github.com/ryanbekhen/feserve
-  license: Apache-2.0
-  formats:
-  - deb
-  - rpm
-  - apk
-
 release:
   draft: true
 
