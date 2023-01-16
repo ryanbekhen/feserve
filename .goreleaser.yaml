@@ -27,7 +27,9 @@ builds:
         goarch: arm
 
 dockers:
-- image_templates: ["ghcr.io/ryanbekhen/feserve:{{ .Version }}"]
+- image_templates: 
+  - "ghcr.io/ryanbekhen/feserve:{{ .Version }}"
+  - "ghcr.io/ryanbekhen/feserve:latest"
   dockerfile: Dockerfile
   build_flag_templates:
   - --label=org.opencontainers.image.title={{ .ProjectName }}
