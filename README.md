@@ -1,8 +1,11 @@
 # Feserve
+
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/ryanbekhen/feserve/release.yml?style=flat-square)
 ![Release](https://img.shields.io/github/v/release/ryanbekhen/feserve?display_name=release&style=flat-square)
 ![GitHub all releases](https://img.shields.io/github/downloads/ryanbekhen/feserve/total?style=flat-square)
 ![GitHub](https://img.shields.io/github/license/ryanbekhen/feserve?style=flat-square)
+
+English | [Indonesia](README-id.md)
 
 Feserve is a lightweight application created to make it easier for Frontend Developers to deploy their applications, without having to use Nginx, Node.js or the like which take up a lot of storage space.
 
@@ -30,6 +33,7 @@ sudo mv feserve /usr/local/bin
 ```shell
 go install github.com/ryanbekhen/feserve
 ```
+
 > **Note**: go version go1.19.5 or later
 
 ## Setup
@@ -50,7 +54,7 @@ port: 8000
 publicDir: build
 ```
 
-With the above configuration, feserve will run on port `8000` and `public/` as its public directory.
+With the above configuration, feserve will run on port `8000` and `public/` as its public directory. To see more details [here](docs/configuration-id.md).
 
 ## Usage
 
@@ -61,7 +65,8 @@ To run it locally, just run `feserve` in your root directory with the following 
 ```shell
 feserve
 ```
-Then open a browser at http://localhost:8000.
+
+Then open a browser at <http://localhost:8000>.
 
 ### Docker
 
@@ -77,7 +82,7 @@ RUN npm run build
 ENV NODE_ENV production
 
 # application serve
-FROM ghcr.io/ryanbekhen/feserve:0.1.0
+FROM ghcr.io/ryanbekhen/feserve:latest
 WORKDIR /app
 COPY app.yaml .
 COPY --from=build /app/build /app/build
@@ -88,7 +93,7 @@ ENTRYPOINT ["feserve"]
 It can also be done in the following way if we have built it first.
 
 ```Dockerfile
-FROM ghcr.io/ryanbekhen/feserve:0.1.0
+FROM ghcr.io/ryanbekhen/feserve:latest
 WORKDIR /app
 COPY app.yaml .
 COPY build ./build
@@ -103,10 +108,12 @@ docker build -t image-name .
 docker run --rm -p 8000:8000 image-name
 ```
 
-Then open a browser at http://localhost:8000.
+Then open a browser at <http://localhost:8000>.
 
 ## Security
+
 If you discover a security vulnerability within Feserve, please send an e-mail to ryanbekhen.official@gmail.com.
 
 ## License
-This program is free software: you can redistribute it and/or modify it under the terms of the Apache license. Feserve and any contributions are copyright © by Achmad Irianto Eka Putra 2023
+
+This program is free software. You can redistribute it and/or modify it under the terms of the Apache license. Feserve and any contributions are copyright © by Achmad Irianto Eka Putra 2023.
