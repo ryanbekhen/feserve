@@ -1,6 +1,8 @@
 # Feserve
-
-## Overview
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/ryanbekhen/feserve/release.yml?style=flat-square)
+![Release](https://img.shields.io/github/v/release/ryanbekhen/feserve?display_name=release&style=flat-square)
+![GitHub all releases](https://img.shields.io/github/downloads/ryanbekhen/feserve/total?style=flat-square)
+![GitHub](https://img.shields.io/github/license/ryanbekhen/feserve?style=flat-square)
 
 Feserve is a lightweight application created to make it easier for Frontend Developers to deploy their applications, without having to use Nginx, Node.js or the like which take up a lot of storage space.
 
@@ -102,8 +104,6 @@ docker run --rm -p 8000:8000 image-name
 ```
 
 Then open a browser at http://localhost:8000.
-
-> **Note**: If you get an `unauthorized` error, it's because the image is only in the Github registry. Please run the command `docker login ghcr.io -u username -p github_personal_access_token` with scope `read:packages` then run it again.
 
 ## Security
 If you discover a security vulnerability within Feserve, please send an e-mail to ryanbekhen.official@gmail.com.
