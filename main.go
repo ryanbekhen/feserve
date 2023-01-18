@@ -7,6 +7,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cache"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	mlogger "github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/ryanbekhen/feserve/internal/config"
 	"github.com/ryanbekhen/feserve/internal/logger"
@@ -32,6 +33,11 @@ func main() {
 	})
 
 	app.Use(mw.CustomHeaderMiddleware)
+
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: conf.AllowOrigins,
+	}))
+
 	app.Use(cache.New(cache.Config{
 		Next: func(c *fiber.Ctx) bool {
 			return c.Query("refresh") == "true"
