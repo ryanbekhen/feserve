@@ -34,9 +34,11 @@ func main() {
 
 	app.Use(mw.CustomHeaderMiddleware)
 
-	app.Use(cors.New(cors.Config{
-		AllowOrigins: conf.AllowOrigins,
-	}))
+	if conf.AllowOrigins != "" {
+		app.Use(cors.New(cors.Config{
+			AllowOrigins: conf.AllowOrigins,
+		}))
+	}
 
 	app.Use(cache.New(cache.Config{
 		Next: func(c *fiber.Ctx) bool {
