@@ -9,14 +9,15 @@ import (
 )
 
 type Config struct {
-	Version     string            `yaml:"version"`
-	Host        string            `yaml:"host"`
-	Port        string            `yaml:"port"`
-	Headers     map[string]string `yaml:"headers"`
-	TimeZone    string            `yaml:"timezone"`
-	PublicDir   string            `yaml:"publicDir"`
-	ProxyHeader string            `yaml:"proxyHeader"`
-	Routes      []Routes          `yaml:"routes"`
+	Version      string            `yaml:"version"`
+	Host         string            `yaml:"host"`
+	Port         string            `yaml:"port"`
+	Headers      map[string]string `yaml:"headers"`
+	AllowOrigins string            `yaml:"allowOrigins"`
+	TimeZone     string            `yaml:"timezone"`
+	PublicDir    string            `yaml:"publicDir"`
+	ProxyHeader  string            `yaml:"proxyHeader"`
+	Routes       []Routes          `yaml:"routes"`
 }
 
 type Routes struct {
