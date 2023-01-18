@@ -54,7 +54,7 @@ port: 8000
 publicDir: build
 ```
 
-With the above configuration, feserve will run on port `8000` and `public/` as its public directory. To see more details [here](docs/configuration-id.md).
+With the above configuration, feserve will run on port `8000` and `public/` as its public directory. To see more details [here](docs/configuration.md).
 
 ## Usage
 
