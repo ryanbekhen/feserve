@@ -1,7 +1,6 @@
 package router
 
 import (
-	"mime"
 	"path/filepath"
 
 	"github.com/gofiber/fiber/v2"
@@ -16,14 +15,9 @@ func Builder(app *fiber.App) {
 
 	for _, route := range cfg.Routes {
 		pathFile := filepath.Join(cfg.PublicDir, route.File)
-		extension := filepath.Ext(pathFile)
 
 		app.Get(route.Path, func(c *fiber.Ctx) error {
-			mimeType := mime.TypeByExtension(extension)
-			if mimeType != "" {
-				c.Set(fiber.HeaderContentType, mimeType)
-			}
-			return c.SendFile(pathFile, true)
+			return c.SendFile(pathFile)
 		})
 	}
 }

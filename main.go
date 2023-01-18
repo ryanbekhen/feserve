@@ -6,8 +6,10 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/cache"
+	mlogger "github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/ryanbekhen/feserve/internal/config"
+	"github.com/ryanbekhen/feserve/internal/logger"
 	mw "github.com/ryanbekhen/feserve/internal/middleware"
 	"github.com/ryanbekhen/feserve/internal/router"
 )
@@ -19,13 +21,26 @@ func init() {
 }
 
 func main() {
+	logger := logger.New(logger.Config{
+		Timezone: conf.TimeZone,
+	})
+
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: true,
 		ProxyHeader:           conf.ProxyHeader,
+		CompressedFileSuffix:  ".feserve.gz",
 	})
 
 	app.Use(mw.CustomHeaderMiddleware)
-	app.Use(logger.New(logger.Config{
+	app.Use(cache.New(cache.Config{
+		Next: func(c *fiber.Ctx) bool {
+			return c.Query("refresh") == "true"
+		},
+		Expiration:   30 * time.Minute,
+		CacheControl: true,
+	}))
+
+	app.Use(mlogger.New(mlogger.Config{
 		TimeZone:   conf.TimeZone,
 		TimeFormat: time.RFC3339,
 		Format:     "[${time}] - ${ip} - ${status} ${method} ${url} ${ua}\n",
@@ -38,16 +53,10 @@ func main() {
 	router.Builder(app)
 
 	addr := fmt.Sprintf("%s:%s", conf.Host, conf.Port)
-	loc, err := time.LoadLocation(conf.TimeZone)
-	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(1)
-	}
 
-	startupMessage := fmt.Sprintf("[%s] - app listening on %s", time.Now().In(loc).Format(time.RFC3339), addr)
-	fmt.Println(startupMessage)
+	logger.Info("app listen on ", addr)
 	if err := app.Listen(addr); err != nil {
-		fmt.Println(err.Error())
+		logger.Info(err.Error())
 		os.Exit(1)
 	}
 }
