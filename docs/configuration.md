@@ -9,6 +9,7 @@ host: 0.0.0.0
 port: 8000
 headers: 
   X-Custom-Header: "hi"
+allowOrigins: "https://gofiber.io, https://gofiber.net"
 timezone: Asia/Jakarta
 publicDir: public
 proxyHeader: CF-Connecting-IP
@@ -36,6 +37,10 @@ If we do not set the `port` configuration then by default the application runs o
 ## Headers
 
 This configuration to do custom header on response.
+
+## Allow Origins
+
+To enable cors, set the configuration with the origin you want by simply writing `allowOrigins: "https://example.com"`. If you want multiple origins, separate them separately using commas (`,`) like this `allowOrigins: "https://example.com, https://example.net"`. By default cors is empty.
 
 ## Timezone
 

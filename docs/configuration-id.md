@@ -9,6 +9,7 @@ host: 0.0.0.0
 port: 8000
 headers: 
   X-Custom-Header: "hi"
+allowOrigins: "https://gofiber.io, https://gofiber.net"
 timezone: Asia/Jakarta
 publicDir: public
 proxyHeader: CF-Connecting-IP
@@ -36,6 +37,10 @@ Jika kita tidak mengatur konfigurasi `port` maka secara default aplikasi berjala
 ## Headers
 
 Konfigurasi ini untuk melakukan kustom header pada response.
+
+## Allow Origins
+
+Untuk mengaktifkan cors, atur konfigurasi dengan origin yang Anda inginkan cukup dengan menulis `allowOrigins: "https://example.com"`. Jika Anda menginginkan beberapa origin, pisahkan secara terpisah menggunakan koma (`,`) seperti `allowOrigins: "https://example.com, https://example.net"` ini. Secara default cors kosong.
 
 ## Timezone
 
