@@ -33,11 +33,14 @@ var (
 )
 
 func Load() *Config {
-	viper.AddConfigPath(".")
-	viper.SetConfigName("app")
-	viper.ReadInConfig()
-	viper.AutomaticEnv()
 	configOnce.Do(func() {
+		viper.AddConfigPath(".")
+		viper.SetConfigName("app")
+		if err := viper.ReadInConfig(); err != nil {
+			fmt.Println(err)
+		}
+		viper.AutomaticEnv()
+
 		config = &Config{}
 		if err := viper.Unmarshal(config); err != nil {
 			panic(err)
