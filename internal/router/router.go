@@ -1,11 +1,13 @@
 package router
 
 import (
-	"path/filepath"
+	"path"
+	"sort"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/ryanbekhen/feserve/internal/config"
 	"github.com/ryanbekhen/feserve/internal/handler"
+	"github.com/ryanbekhen/feserve/internal/loadbalancer"
 )
 
 func Builder(app *fiber.App) {
@@ -13,11 +15,15 @@ func Builder(app *fiber.App) {
 
 	app.Get("/ping", handler.Ping)
 
-	for _, route := range cfg.Routes {
-		pathFile := filepath.Join(cfg.PublicDir, route.File)
+	sort.Slice(cfg.Routes, func(i, j int) bool {
+		return cfg.Routes[i].Path > cfg.Routes[j].Path
+	})
 
-		app.Get(route.Path, func(c *fiber.Ctx) error {
-			return c.SendFile(pathFile)
-		})
+	for _, route := range cfg.Routes {
+		if len(route.Balancer) == 0 {
+			app.Get(route.Path, handler.Static(cfg.PublicDir, route.File))
+		} else {
+			app.All(path.Join(route.Path, "*"), loadbalancer.New(route.Path, route.Balancer))
+		}
 	}
 }

@@ -85,3 +85,15 @@ routes:
 ```
 
 With the configuration above when we access `/about` the file that is responded is `about.html` which in fact we can also access it with `/about.html`. Here we also see from the configuration above that if we access `/myjs` we will get a javascript response file of `myjavascript.js`.
+
+If you want the feserve to be a load balancer with a config like the following:
+
+```yaml
+routes:
+  - path: "*"
+    file: index.html
+  - path: /payment
+    balancer:
+      - http://localhost:3000
+      - http://localhost:3001
+```

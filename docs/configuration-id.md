@@ -85,3 +85,15 @@ routes:
 ```
 
 Dengan konfigurasi diatas ketika kita mengakses `/about` file yang direspon adalah `about.html` yang sebenarnya kita juga bisa mengaksesnya dengan `/about.html`. Di sini kita juga melihat dari konfigurasi di atas bahwa jika kita mengakses `/myjs` kita akan mendapatkan file respon javascript dari `myjavascript.js`.
+
+Jika ingin feserve menjadi load balancer dengan config seperti berikut:
+
+```yaml
+routes:
+  - path: "*"
+    file: index.html
+  - path: /payment
+    balancer:
+      - http://localhost:3000
+      - http://localhost:3001
+```

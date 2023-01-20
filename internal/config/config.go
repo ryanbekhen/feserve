@@ -21,8 +21,9 @@ type Config struct {
 }
 
 type Routes struct {
-	Path string `yaml:"path"`
-	File string `yaml:"file"`
+	Path     string   `yaml:"path"`
+	File     string   `yaml:"file"`
+	Balancer []string `yaml:"balancer"`
 }
 
 const version = "1"

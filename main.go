@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -41,11 +42,13 @@ func main() {
 	}
 
 	app.Use(cache.New(cache.Config{
-		Next: func(c *fiber.Ctx) bool {
-			return c.Query("refresh") == "true"
+		ExpirationGenerator: func(c *fiber.Ctx, cfg *cache.Config) time.Duration {
+			cachetime, _ := strconv.Atoi(c.GetRespHeader("Cache-Time", "0"))
+			return time.Second * time.Duration(cachetime)
 		},
-		Expiration:   30 * time.Minute,
-		CacheControl: true,
+		KeyGenerator: func(c *fiber.Ctx) string {
+			return c.Path()
+		},
 	}))
 
 	app.Use(mlogger.New(mlogger.Config{
@@ -56,6 +59,10 @@ func main() {
 
 	app.Static("/", conf.PublicDir, fiber.Static{
 		Compress: true,
+		ModifyResponse: func(c *fiber.Ctx) error {
+			c.Response().Header.Add("Cache-Time", "86400")
+			return nil
+		},
 	})
 
 	router.Builder(app)
