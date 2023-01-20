@@ -11,6 +11,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	mlogger "github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/ryanbekhen/feserve/internal/config"
+	"github.com/ryanbekhen/feserve/internal/handler"
 	"github.com/ryanbekhen/feserve/internal/logger"
 	mw "github.com/ryanbekhen/feserve/internal/middleware"
 	"github.com/ryanbekhen/feserve/internal/router"
@@ -31,6 +32,7 @@ func main() {
 		DisableStartupMessage: true,
 		ProxyHeader:           conf.ProxyHeader,
 		CompressedFileSuffix:  ".feserve.gz",
+		ErrorHandler:          handler.ErrorHandler,
 	})
 
 	app.Use(mw.CustomHeaderMiddleware)

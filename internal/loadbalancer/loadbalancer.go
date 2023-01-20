@@ -7,9 +7,9 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/proxy"
 )
 
-func New(path string, server []string) fiber.Handler {
+func New(path string, servers []string) fiber.Handler {
 	return proxy.Balancer(proxy.Config{
-		Servers: server,
+		Servers: servers,
 		ModifyRequest: func(c *fiber.Ctx) error {
 			requestPath := strings.Replace(c.Path(), path, "", -1)
 			c.Request().SetRequestURI(requestPath)
