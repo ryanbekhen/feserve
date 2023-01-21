@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"errors"
 	"net"
 
 	"github.com/gofiber/fiber/v2"
@@ -10,11 +9,6 @@ import (
 func ErrorHandler(c *fiber.Ctx, err error) error {
 	code := fiber.StatusInternalServerError
 	message := fiber.ErrInternalServerError.Message
-	var errFiber *fiber.Error
-
-	if errors.As(err, &errFiber) {
-		code = errFiber.Code
-	}
 
 	switch t := err.(type) {
 	case *fiber.Error:
