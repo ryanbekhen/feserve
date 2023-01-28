@@ -18,12 +18,19 @@ type Config struct {
 	PublicDir    string            `yaml:"publicDir"`
 	ProxyHeader  string            `yaml:"proxyHeader"`
 	Routes       []Routes          `yaml:"routes"`
+	Letsencrypt  *Letsencrypt      `yaml:"letsencrypt,omitempty"`
 }
 
 type Routes struct {
 	Path     string   `yaml:"path"`
 	File     string   `yaml:"file"`
 	Balancer []string `yaml:"balancer"`
+}
+
+type Letsencrypt struct {
+	Email     string   `yaml:"email"`
+	Domains   []string `yaml:"domains"`
+	CertsPath string   `yaml:"certsPath"`
 }
 
 const version = "1"
@@ -37,9 +44,7 @@ func Load() *Config {
 	configOnce.Do(func() {
 		viper.AddConfigPath(".")
 		viper.SetConfigName("app")
-		if err := viper.ReadInConfig(); err != nil {
-			fmt.Println(err)
-		}
+		_ = viper.ReadInConfig()
 		viper.AutomaticEnv()
 
 		config = &Config{}
@@ -85,6 +90,12 @@ func Load() *Config {
 				Path: "*",
 				File: "index.html",
 			})
+		}
+
+		if config.Letsencrypt != nil {
+			if config.Letsencrypt.CertsPath == "" {
+				config.Letsencrypt.CertsPath = "certs"
+			}
 		}
 	})
 	return config
