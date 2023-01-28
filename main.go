@@ -36,7 +36,7 @@ func main() {
 			Email:     conf.Letsencrypt.Email,
 			Domains:   conf.Letsencrypt.Domains,
 			CertsPath: conf.Letsencrypt.CertsPath,
-			Debug:     true,
+			Debug:     false,
 		})
 
 		if err := cert.ReadFromFile(); err != nil {
@@ -99,7 +99,7 @@ func main() {
 
 		config := &tls.Config{
 			Certificates: []tls.Certificate{cer},
-			MinVersion:   tls.VersionTLS10,
+			MinVersion:   tls.VersionTLS12,
 			CipherSuites: []uint16{
 				tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,
 				tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
