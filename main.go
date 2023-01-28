@@ -1,8 +1,10 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	"os"
+	"path"
 	"strconv"
 	"time"
 
@@ -10,6 +12,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cache"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	mlogger "github.com/gofiber/fiber/v2/middleware/logger"
+	certificate "github.com/ryanbekhen/feserve/internal/cert"
 	"github.com/ryanbekhen/feserve/internal/config"
 	"github.com/ryanbekhen/feserve/internal/handler"
 	"github.com/ryanbekhen/feserve/internal/logger"
@@ -27,6 +30,22 @@ func main() {
 	logger := logger.New(logger.Config{
 		Timezone: conf.TimeZone,
 	})
+
+	if conf.Letsencrypt != nil {
+		cert := certificate.NewCert(&certificate.Options{
+			Email:     conf.Letsencrypt.Email,
+			Domains:   conf.Letsencrypt.Domains,
+			CertsPath: conf.Letsencrypt.CertsPath,
+			Debug:     true,
+		})
+
+		if err := cert.ReadFromFile(); err != nil {
+			if err := cert.Generate(); err != nil {
+				logger.Error(err.Error())
+				os.Exit(1)
+			}
+		}
+	}
 
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: true,
@@ -69,11 +88,46 @@ func main() {
 
 	router.Builder(app)
 
-	addr := fmt.Sprintf("%s:%s", conf.Host, conf.Port)
+	if conf.Letsencrypt != nil {
+		certpath := path.Join(conf.Letsencrypt.CertsPath, "ssl.cert")
+		keypath := path.Join(conf.Letsencrypt.CertsPath, "ssl.key")
 
-	logger.Info("app listen on ", addr)
-	if err := app.Listen(addr); err != nil {
-		logger.Info(err.Error())
-		os.Exit(1)
+		cer, err := tls.LoadX509KeyPair(certpath, keypath)
+		if err != nil {
+			logger.Fatal(err)
+		}
+
+		config := &tls.Config{
+			Certificates: []tls.Certificate{cer},
+			MinVersion:   tls.VersionTLS10,
+			CipherSuites: []uint16{
+				tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,
+				tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+				tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+				tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+			},
+		}
+
+		addr := fmt.Sprintf("%s:%s", conf.Host, "443")
+
+		logger.Info("app listen on ", addr)
+		ln, err := tls.Listen("tcp", ":443", config)
+		if err != nil {
+			panic(err)
+		}
+
+		logger.Fatal(app.Listener(ln))
+		if err := app.Listener(ln); err != nil {
+			logger.Info(err.Error())
+			os.Exit(1)
+		}
+	} else {
+		addr := fmt.Sprintf("%s:%s", conf.Host, conf.Port)
+
+		logger.Info("app listen on ", addr)
+		if err := app.Listen(addr); err != nil {
+			logger.Info(err.Error())
+			os.Exit(1)
+		}
 	}
 }
