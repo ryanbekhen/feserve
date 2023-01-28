@@ -111,7 +111,7 @@ func main() {
 		addr := fmt.Sprintf("%s:%s", conf.Host, "443")
 
 		logger.Info("app listen on ", addr)
-		ln, err := tls.Listen("tcp", ":443", config)
+		ln, err := tls.Listen("tcp", addr, config)
 		if err != nil {
 			panic(err)
 		}
