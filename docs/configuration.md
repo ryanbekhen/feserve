@@ -32,7 +32,11 @@ If we set the `host` configuration with a certain IP then the application can on
 
 ## Port
 
-If we do not set the `port` configuration then by default the application runs on port `8000`.
+If we do not set the `port` configuration then by default the application runs on port `8000`. If using Let's Encrypt then port `80` as default.
+
+## TLS Port
+
+If we do not set the `tlsPort` configuration then by default the application runs on port `443`. This configuration is used when Let's Encrypt is set.
 
 ## Headers
 
@@ -96,4 +100,17 @@ routes:
     balancer:
       - http://localhost:3000
       - http://localhost:3001
+```
+
+## Let's Encrypt
+
+To use Let's Encrypt add a configuration like the following example:
+
+```yaml
+letsencrypt:
+  email: feserve@example.com
+  domains:
+    - example.com
+    - www.example.com
+  certsPath: certs
 ```
