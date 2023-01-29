@@ -4,6 +4,7 @@ import (
 	"net"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/ryanbekhen/feserve/internal/logger"
 )
 
 func ErrorHandler(c *fiber.Ctx, err error) error {
@@ -19,6 +20,9 @@ func ErrorHandler(c *fiber.Ctx, err error) error {
 			code = fiber.StatusServiceUnavailable
 			message = fiber.ErrServiceUnavailable.Message
 		}
+	default:
+		logger := logger.New()
+		logger.Error(err)
 	}
 
 	c.Set(fiber.HeaderContentType, fiber.MIMETextPlainCharsetUTF8)

@@ -12,6 +12,7 @@ type Config struct {
 	Version      string            `yaml:"version"`
 	Host         string            `yaml:"host"`
 	Port         string            `yaml:"port"`
+	TLSPort      string            `yaml:"tlsPort"`
 	Headers      map[string]string `yaml:"headers"`
 	AllowOrigins string            `yaml:"allowOrigins"`
 	TimeZone     string            `yaml:"timezone"`
@@ -69,8 +70,20 @@ func Load() *Config {
 			config.Port = viper.GetString("PORT")
 		}
 
+		if viper.GetString("TLS_PORT") != "" {
+			config.TLSPort = viper.GetString("TLS_PORT")
+		}
+
+		if config.Port == "" && config.Letsencrypt != nil {
+			config.Port = "80"
+		}
+
 		if config.Port == "" {
 			config.Port = "8000"
+		}
+
+		if config.TLSPort == "" {
+			config.TLSPort = "443"
 		}
 
 		if viper.GetString("TZ") != "" {

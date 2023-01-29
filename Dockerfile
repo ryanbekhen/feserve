@@ -1,5 +1,7 @@
 FROM scratch
 COPY feserve /usr/bin/feserve
-EXPOSE 8000
+
+EXPOSE 80
+EXPOSE 443
 
 ENTRYPOINT ["/usr/bin/feserve"]

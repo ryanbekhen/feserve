@@ -8,19 +8,15 @@ import (
 )
 
 func New(path string, servers []string) fiber.Handler {
-	return proxy.Balancer(proxy.Config{
-		Servers: servers,
-		ModifyRequest: func(c *fiber.Ctx) error {
-			requestPath := strings.Replace(c.Path(), path, "", -1)
-			c.Request().SetRequestURI(requestPath)
-			c.Request().Header.Add("X-Real-IP", c.IP())
-			c.Request().Header.Add("X-Real-Path", c.Path())
-			return nil
-		},
-		ModifyResponse: func(c *fiber.Ctx) error {
-			c.Response().Header.Del(fiber.HeaderServer)
-			c.Request().SetRequestURI(c.Get("X-Real-Path"))
-			return nil
-		},
-	})
+	balancer := NewRoundRobin(servers)
+	return func(c *fiber.Ctx) error {
+		host := balancer.Get()
+		requestPath := strings.Replace(c.Path(), path, "", -1)
+		query := string(c.Request().URI().QueryString())
+		if query != "" {
+			query = "?" + query
+		}
+		c.Request().Header.Add("X-Real-IP", c.IP())
+		return proxy.Do(c, host+requestPath+query)
+	}
 }
