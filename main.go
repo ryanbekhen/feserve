@@ -4,8 +4,10 @@ import (
 	"crypto/tls"
 	"fmt"
 	"os"
+	"os/signal"
 	"path"
 	"strconv"
+	"syscall"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -55,6 +57,7 @@ func main() {
 	})
 
 	app.Use(mw.CustomHeaderMiddleware)
+	app.Use(mw.RedirectHttpsMiddleware)
 
 	if conf.AllowOrigins != "" {
 		app.Use(cors.New(cors.Config{
@@ -88,46 +91,55 @@ func main() {
 
 	router.Builder(app)
 
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
+
 	if conf.Letsencrypt != nil {
-		certpath := path.Join(conf.Letsencrypt.CertsPath, "ssl.cert")
-		keypath := path.Join(conf.Letsencrypt.CertsPath, "ssl.key")
+		go func() {
+			certpath := path.Join(conf.Letsencrypt.CertsPath, "ssl.cert")
+			keypath := path.Join(conf.Letsencrypt.CertsPath, "ssl.key")
 
-		cer, err := tls.LoadX509KeyPair(certpath, keypath)
-		if err != nil {
-			logger.Fatal(err)
-		}
+			cer, err := tls.LoadX509KeyPair(certpath, keypath)
+			if err != nil {
+				logger.Error(err)
+				os.Exit(1)
+			}
 
-		config := &tls.Config{
-			Certificates: []tls.Certificate{cer},
-			MinVersion:   tls.VersionTLS12,
-			CipherSuites: []uint16{
-				tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,
-				tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-				tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-				tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-			},
-		}
+			tlsConfig := &tls.Config{
+				Certificates: []tls.Certificate{cer},
+				MinVersion:   tls.VersionTLS12,
+				CipherSuites: []uint16{
+					tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,
+					tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+					tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+					tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+				},
+			}
 
-		addr := fmt.Sprintf("%s:%s", conf.Host, "443")
+			addr := fmt.Sprintf("%s:%s", conf.Host, conf.TLSPort)
 
-		logger.Info("app listen on ", addr)
-		ln, err := tls.Listen("tcp", addr, config)
-		if err != nil {
-			panic(err)
-		}
+			logger.Info("app listen on ", addr)
+			ln, err := tls.Listen("tcp", addr, tlsConfig)
+			if err != nil {
+				logger.Error(err.Error())
+				os.Exit(1)
+			}
 
-		logger.Fatal(app.Listener(ln))
-		if err := app.Listener(ln); err != nil {
-			logger.Info(err.Error())
-			os.Exit(1)
-		}
-	} else {
+			if err := app.Listener(ln); err != nil {
+				logger.Error(err.Error())
+				os.Exit(1)
+			}
+		}()
+	}
+
+	go func() {
 		addr := fmt.Sprintf("%s:%s", conf.Host, conf.Port)
 
 		logger.Info("app listen on ", addr)
 		if err := app.Listen(addr); err != nil {
-			logger.Info(err.Error())
+			logger.Error(err.Error())
 			os.Exit(1)
 		}
-	}
+	}()
+	<-stop
 }

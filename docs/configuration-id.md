@@ -32,7 +32,11 @@ Jika kita mengatur konfigurasi `host` dengan IP tertentu maka aplikasi hanya dap
 
 ## Port
 
-Jika kita tidak mengatur konfigurasi `port` maka secara default aplikasi berjalan pada port `8000`.
+Jika kita tidak mengatur konfigurasi `port` maka secara default aplikasi berjalan pada port `8000`. Jika menggunakan Let's Encrypt maka port `80` sebagai default.
+
+## TLS Port
+
+Jika kita tidak mengatur konfigurasi `tlsPort` maka secara default aplikasi berjalan pada port `443`. Konfigurasi ini digunakan saat Let's Encrypt diatur.
 
 ## Headers
 
@@ -96,4 +100,17 @@ routes:
     balancer:
       - http://localhost:3000
       - http://localhost:3001
+```
+
+## Let's Encrypt
+
+Untuk menggunakan Let's Encrypt tambahkan konfigurasi seperti contoh berikut:
+
+```yaml
+letsencrypt:
+  email: feserve@example.com
+  domains:
+    - example.com
+    - www.example.com
+  certsPath: certs
 ```
