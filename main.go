@@ -2,7 +2,7 @@ package main
 
 import (
 	"crypto/tls"
-	"fmt"
+	"net"
 	"os"
 	"os/signal"
 	"path"
@@ -151,7 +151,7 @@ func main() {
 				},
 			}
 
-			addr := fmt.Sprintf("%s:%s", conf.Host, conf.TLSPort)
+			addr := net.JoinHostPort(conf.Host, conf.TLSPort)
 
 			logger.Info("app listen on ", addr)
 			ln, err := tls.Listen("tcp", addr, tlsConfig)
@@ -168,7 +168,7 @@ func main() {
 	}
 
 	go func() {
-		addr := fmt.Sprintf("%s:%s", conf.Host, conf.Port)
+		addr := net.JoinHostPort(conf.Host, conf.Port)
 
 		logger.Info("app listen on ", addr)
 		if err := app.Listen(addr); err != nil {
