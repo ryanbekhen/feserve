@@ -4,8 +4,13 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
+	"crypto/tls"
+	"crypto/x509/pkix"
+	"errors"
 	"os"
 	"path"
+	"sync"
+	"time"
 
 	"github.com/go-acme/lego/v4/certcrypto"
 	"github.com/go-acme/lego/v4/certificate"
@@ -20,6 +25,11 @@ const (
 	letsencryptProduction = "https://acme-v02.api.letsencrypt.org/directory"
 )
 
+var (
+	certStore     *Cert
+	certStoreSync sync.Once
+)
+
 type Options struct {
 	Email     string
 	Domains   []string
@@ -32,14 +42,45 @@ type Cert struct {
 	cert    *certificate.Resource
 }
 
-func NewCert(options *Options) *Cert {
-	return &Cert{
-		options: options,
-	}
+type CertDetail struct {
+	Issuer pkix.Name
+	Expire time.Time
+}
+
+func NewCert(options ...*Options) *Cert {
+	certStoreSync.Do(func() {
+		certStore = &Cert{
+			options: options[0],
+		}
+	})
+	return certStore
 }
 
 func (c *Cert) Get() *certificate.Resource {
 	return c.cert
+}
+
+func (c *Cert) Validate() (*CertDetail, error) {
+	if len(c.options.Domains) > 0 {
+		return nil, errors.New("domains don't exist")
+	}
+	domain := c.options.Domains[0]
+
+	conn, err := tls.Dial("tcp", domain+":443", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	err = conn.VerifyHostname(domain)
+	if err != nil {
+		return nil, err
+	}
+
+	certDetail := &CertDetail{
+		Issuer: conn.ConnectionState().PeerCertificates[0].Issuer,
+		Expire: conn.ConnectionState().PeerCertificates[0].NotAfter,
+	}
+	return certDetail, nil
 }
 
 func (c *Cert) ReadFromFile() error {
