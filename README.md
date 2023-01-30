@@ -9,6 +9,13 @@ English | [Indonesia](README-id.md)
 
 Feserve is a lightweight application created to make it easier for Frontend Developers to deploy their applications, without having to use Nginx, Node.js or the like which take up a lot of storage space.
 
+## Feature
+
+- Serve static files
+- Custom url path to file
+- Load balancer (HTTP)
+- Generate SSL certificate and auto renew (Let's Encrypt)
+
 ## Installation
 
 ### Binary File
