@@ -11,7 +11,7 @@ func New(path string, servers []string) fiber.Handler {
 	balancer := NewRoundRobin(servers)
 	return func(c *fiber.Ctx) error {
 		host := balancer.Get()
-		requestPath := strings.Replace(c.Path(), path, "", -1)
+		requestPath := strings.Replace(c.Path(), path, "", 1)
 		query := string(c.Request().URI().QueryString())
 		if query != "" {
 			query = "?" + query
