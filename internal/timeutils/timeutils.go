@@ -1,11 +1,12 @@
-package logger
+package timeutils
 
 import "time"
 
-func loadLocation(timezone string) *time.Location {
+func Location(timezone string) *time.Location {
 	loc, err := time.LoadLocation(timezone)
 	if err != nil {
 		loc, _ = time.LoadLocation("UTC")
 	}
 	return loc
 }
+
