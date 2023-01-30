@@ -9,4 +9,3 @@ func Location(timezone string) *time.Location {
 	}
 	return loc
 }
-
