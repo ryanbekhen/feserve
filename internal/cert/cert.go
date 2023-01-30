@@ -167,13 +167,15 @@ func (c *Cert) Generate() error {
 
 	_ = os.Mkdir(c.options.CertsPath, os.ModePerm)
 
-	if err := os.WriteFile(path.Join(c.options.CertsPath, "ssl.cert"), certificates.Certificate, os.ModePerm); err != nil {
+	err = os.WriteFile(path.Join(c.options.CertsPath, "ssl.cert"), certificates.Certificate, os.ModePerm)
+	if err != nil {
 		return err
 	}
 
-	if err := os.WriteFile(path.Join(c.options.CertsPath, "ssl.key"), certificates.PrivateKey, os.ModePerm); err != nil {
+	err = os.WriteFile(path.Join(c.options.CertsPath, "ssl.key"), certificates.PrivateKey, os.ModePerm)
+	if err != nil {
 		return err
 	}
 
-	return nil
+	return err
 }
