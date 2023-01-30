@@ -5,6 +5,8 @@ import (
 	"os"
 	"sync"
 	"time"
+
+	"github.com/ryanbekhen/feserve/internal/timeutils"
 )
 
 type Config struct {
@@ -23,11 +25,11 @@ var (
 func New(config ...Config) *Log {
 	logOnce.Do(func() {
 		if len(config) == 0 {
-			loc := loadLocation("UTC")
+			loc := timeutils.Location("UTC")
 			log = &Log{loc}
 			return
 		}
-		loc := loadLocation(config[0].Timezone)
+		loc := timeutils.Location(config[0].Timezone)
 		log = &Log{loc}
 	})
 

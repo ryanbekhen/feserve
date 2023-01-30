@@ -61,7 +61,7 @@ func (c *Cert) Get() *certificate.Resource {
 }
 
 func (c *Cert) Validate() (*CertDetail, error) {
-	if len(c.options.Domains) > 0 {
+	if len(c.options.Domains) == 0 {
 		return nil, errors.New("domains don't exist")
 	}
 	domain := c.options.Domains[0]
@@ -70,6 +70,7 @@ func (c *Cert) Validate() (*CertDetail, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer conn.Close()
 
 	err = conn.VerifyHostname(domain)
 	if err != nil {

@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/go-acme/lego/v4 v4.9.1
 	github.com/gofiber/fiber/v2 v2.41.0
+	github.com/robfig/cron/v3 v3.0.0
 	github.com/spf13/viper v1.14.0
 )
 
