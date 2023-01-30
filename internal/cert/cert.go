@@ -103,6 +103,10 @@ func (c *Cert) ReadFromFile() error {
 	return nil
 }
 
+func (c *Cert) Renew() error {
+	return c.Generate()
+}
+
 func (c *Cert) Generate() error {
 	// Create a user. New accounts need an email and private key to start.
 	privateKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
