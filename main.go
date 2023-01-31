@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/tls"
+	"fmt"
 	"net"
 	"os"
 	"os/signal"
@@ -26,11 +27,16 @@ import (
 
 var conf *config.Config
 
-func init() {
-	conf = config.Load()
-}
-
 func main() {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+	}()
+
+	conf = config.Load()
+
 	logger := logger.New(logger.Config{
 		Timezone: conf.TimeZone,
 	})
@@ -91,8 +97,7 @@ func main() {
 
 		if err := cert.ReadFromFile(); err != nil {
 			if err := cert.Generate(); err != nil {
-				logger.Error(err.Error())
-				os.Exit(1)
+				panic(err.Error())
 			}
 		}
 
@@ -113,20 +118,17 @@ func main() {
 			if days <= 14 {
 				scheduler.Stop()
 				if err := app.Shutdown(); err != nil {
-					logger.Error(err.Error())
-					os.Exit(1)
+					panic(err.Error())
 				}
 
 				if err := cert.Generate(); err != nil {
-					logger.Error(err.Error())
-					os.Exit(1)
+					panic(err.Error())
 				}
 				os.Exit(0)
 			}
 		})
 		if err != nil {
-			logger.Error(err.Error())
-			os.Exit(1)
+			panic(err.Error())
 		}
 		scheduler.Start()
 
@@ -136,8 +138,7 @@ func main() {
 
 			cer, err := tls.LoadX509KeyPair(certpath, keypath)
 			if err != nil {
-				logger.Error(err)
-				os.Exit(1)
+				panic(err.Error())
 			}
 
 			tlsConfig := &tls.Config{
@@ -156,13 +157,11 @@ func main() {
 			logger.Info("app listen on ", addr)
 			ln, err := tls.Listen("tcp", addr, tlsConfig)
 			if err != nil {
-				logger.Error(err.Error())
-				os.Exit(1)
+				panic(err.Error())
 			}
 
 			if err := app.Listener(ln); err != nil {
-				logger.Error(err.Error())
-				os.Exit(1)
+				panic(err.Error())
 			}
 		}()
 	}
@@ -172,8 +171,7 @@ func main() {
 
 		logger.Info("app listen on ", addr)
 		if err := app.Listen(addr); err != nil {
-			logger.Error(err.Error())
-			os.Exit(1)
+			panic(err.Error())
 		}
 	}()
 	<-stop
