@@ -77,6 +77,19 @@ Then open a browser at <http://localhost:8000>.
 
 ### Docker
 
+Before running the command below, first create the `app.yaml` config file.
+
+```shell
+docker run --name feserve -d \
+  -p 80:80 \
+  -p 443:443 \
+  -v $(pwd)/certs:/certs \
+  -v $(pwd)/app.yaml:/app.yaml \
+  ghcr.io/ryanbekhen/feserve:latest
+```
+
+### Dockerfile
+
 To run it within docker, create a file `Dockerfile` like the following example.
 
 ```Dockerfile
