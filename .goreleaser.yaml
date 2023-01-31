@@ -8,7 +8,6 @@ builds:
   - binary: feserve
     ldflags:
       - -s -w -X github.com/ryanbekhen/feserve.Version={{ .Version }}
-      - -a -installsuffix cgo
     env:
       - CGO_ENABLED=0
     goos:
@@ -43,7 +42,7 @@ dockers:
   - --label=org.opencontainers.image.licenses=Apache-2.0
 
 release:
-  draft: true
+  draft: false
 
 archives:
   - rlcp: true

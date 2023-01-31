@@ -1,7 +1,8 @@
-FROM alpine
-RUN apk update \
-    && apk add --no-cache ca-certificates tzdata \
-    && update-ca-certificates
-COPY feserve /usr/bin/feserve
+FROM alpine:latest as certs
+RUN apk --update add ca-certificates
+
+FROM scratch
+COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+WORKDIR /feserve
 
 ENTRYPOINT ["/usr/bin/feserve"]
