@@ -8,6 +8,7 @@ builds:
   - binary: feserve
     ldflags:
       - -s -w -X github.com/ryanbekhen/feserve.Version={{ .Version }}
+      - -a -installsuffix cgo
     env:
       - CGO_ENABLED=0
     goos:
