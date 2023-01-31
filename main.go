@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/tls"
+	"fmt"
 	"net"
 	"os"
 	"os/signal"
@@ -26,11 +27,16 @@ import (
 
 var conf *config.Config
 
-func init() {
-	conf = config.Load()
-}
-
 func main() {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+	}()
+
+	conf = config.Load()
+
 	logger := logger.New(logger.Config{
 		Timezone: conf.TimeZone,
 	})
