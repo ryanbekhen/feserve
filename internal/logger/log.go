@@ -2,7 +2,6 @@ package logger
 
 import (
 	"fmt"
-	"os"
 	"sync"
 	"time"
 
@@ -48,9 +47,4 @@ func (l *Log) Info(a ...any) {
 
 func (l *Log) Error(a ...any) {
 	fmt.Println(l.buildMessage(a...))
-}
-
-func (l *Log) Fatal(a ...any) {
-	fmt.Println(l.buildMessage(a...))
-	os.Exit(1)
 }

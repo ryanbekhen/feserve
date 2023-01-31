@@ -55,8 +55,7 @@ func Load() *Config {
 
 		if _, err := os.Stat("app.yaml"); err == nil {
 			if config.Version != version {
-				fmt.Printf("configuration version must be %s\n", version)
-				os.Exit(1)
+				panic(fmt.Sprintf("configuration version must be %s\n", version))
 			}
 		} else {
 			config.Version = version
