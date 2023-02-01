@@ -80,7 +80,12 @@ func (p *Proxy) Routing(r *fiber.App) {
 				query = "?" + query
 			}
 			httputils.ForwardUserIP(c)
-			return proxy.Do(c, server+requestPath+query)
+			err := proxy.Do(c, server+requestPath+query)
+			if err != nil {
+				return err
+			}
+			c.Response().Header.Del(fiber.HeaderServer)
+			return nil
 		})
 	}
 }
