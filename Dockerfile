@@ -5,6 +5,4 @@ FROM scratch
 COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY feserve /usr/bin/feserve
 
-WORKDIR /feserve
-
 ENTRYPOINT ["/usr/bin/feserve"]
