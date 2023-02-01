@@ -73,6 +73,8 @@ func main() {
 		Format:     "[${time}] - ${ip} - ${status} ${method} ${url} ${ua}\n",
 	}))
 
+	router.Builder(app)
+
 	app.Static("/", conf.PublicDir, fiber.Static{
 		Compress: true,
 		ModifyResponse: func(c *fiber.Ctx) error {
@@ -80,8 +82,6 @@ func main() {
 			return nil
 		},
 	})
-
-	router.Builder(app)
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
@@ -178,9 +178,5 @@ func main() {
 
 	if scheduler != nil {
 		scheduler.Stop()
-	}
-
-	if err := app.Shutdown(); err != nil {
-		logger.Error(err.Error())
 	}
 }

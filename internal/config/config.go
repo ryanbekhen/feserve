@@ -25,6 +25,8 @@ type Config struct {
 type Routes struct {
 	Path     string   `yaml:"path"`
 	File     string   `yaml:"file"`
+	Rewrite  bool     `yaml:"rewrite"`
+	Domain   string   `yaml:"domain"`
 	Balancer []string `yaml:"balancer"`
 }
 

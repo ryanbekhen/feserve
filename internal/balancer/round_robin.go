@@ -1,8 +1,6 @@
-package loadbalancer
+package balancer
 
-import (
-	"sync"
-)
+import "sync"
 
 type RoundRobin struct {
 	sync.Mutex
