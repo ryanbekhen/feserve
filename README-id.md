@@ -27,6 +27,9 @@ wget https://github.com/ryanbekhen/feserve/releases/download/v0.1.0/feserve_0.1.
 wget https://github.com/ryanbekhen/feserve/releases/download/v0.1.0/checksums.txt
 unzip feserve_0.1.0_linux_amd64.zip 
 sha256sum --ignore-missing -c checksums.txt
+
+# permission for 80/443
+sudo setcap 'cap_net_bind_service=+ep' ./feserve
 ```
 
 Setelah menjalankan perintah di atas, pindahkan file biner ke `/usr/local/bin` dengan perintah berikut.
