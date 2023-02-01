@@ -58,7 +58,20 @@ snapshot:
   name_template: '{{ incpatch .Version }}-next'
 
 changelog:
+  use: git
   sort: asc
+  groups:
+    - title: Features
+      regexp: "^.*feat[(\\w)]*:+.*$"
+      order: 0
+    - title: 'Bug fixes'
+      regexp: "^.*fix[(\\w)]*:+.*$"
+      order: 1
+    - title: 'Enhancements'
+      regexp: "^.*chore[(\\w)]*:+.*$"
+      order: 2
+    - title: Others
+      order: 999
   filters:
     exclude:
       - '^docs:'
