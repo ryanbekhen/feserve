@@ -1,5 +1,6 @@
 # Feserve
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/ryanbekhen/feserve)](https://goreportcard.com/report/github.com/ryanbekhen/feserve)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/ryanbekhen/feserve/release.yml?style=flat-square)
 ![Release](https://img.shields.io/github/v/release/ryanbekhen/feserve?display_name=release&style=flat-square)
 ![GitHub all releases](https://img.shields.io/github/downloads/ryanbekhen/feserve/total?style=flat-square)
@@ -33,7 +34,6 @@ After running the above command, move the binary file to `/usr/local/bin` with t
 
 ```shell
 sudo mv feserve /usr/local/bin
-
 
 # permission for 80/443
 sudo setcap 'cap_net_bind_service=+ep' ./usr/local/bin
