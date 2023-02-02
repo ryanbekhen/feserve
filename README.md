@@ -1,5 +1,6 @@
 # Feserve
 
+[![Mentioned in Awesome Fiber](https://awesome.re/mentioned-badge.svg)](https://github.com/gofiber/awesome-fiber#%EF%B8%8F-tools)
 [![Go Report Card](https://goreportcard.com/badge/github.com/ryanbekhen/feserve)](https://goreportcard.com/report/github.com/ryanbekhen/feserve)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/ryanbekhen/feserve/release.yml?style=flat-square)
 ![Release](https://img.shields.io/github/v/release/ryanbekhen/feserve?display_name=release&style=flat-square)
