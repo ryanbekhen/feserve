@@ -80,6 +80,7 @@ func main() {
 
 	app.Static("/", conf.PublicDir, fiber.Static{
 		Compress: true,
+		Browse:   true,
 		ModifyResponse: func(c *fiber.Ctx) error {
 			c.Response().Header.Add("Cache-Time", "86400")
 			return nil

@@ -99,13 +99,6 @@ func Load() *Config {
 			config.PublicDir = "public"
 		}
 
-		if len(config.Routes) == 0 {
-			config.Routes = append(config.Routes, Routes{
-				Path: "*",
-				File: "index.html",
-			})
-		}
-
 		if config.Letsencrypt != nil {
 			if config.Letsencrypt.CertsPath == "" {
 				config.Letsencrypt.CertsPath = "certs"
