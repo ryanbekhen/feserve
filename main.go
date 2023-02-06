@@ -49,7 +49,10 @@ func main() {
 	})
 
 	app.Use(mw.CustomHeaderMiddleware)
-	app.Use(mw.RedirectHttpsMiddleware)
+
+	if conf.Letsencrypt != nil {
+		app.Use(mw.RedirectHttpsMiddleware)
+	}
 
 	if conf.AllowOrigins != "" {
 		app.Use(cors.New(cors.Config{
