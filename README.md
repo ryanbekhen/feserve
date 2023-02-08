@@ -6,6 +6,7 @@
 ![Release](https://img.shields.io/github/v/release/ryanbekhen/feserve?display_name=release&style=flat-square)
 ![GitHub all releases](https://img.shields.io/github/downloads/ryanbekhen/feserve/total?style=flat-square)
 ![GitHub](https://img.shields.io/github/license/ryanbekhen/feserve?style=flat-square)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fryanbekhen%2Ffeserve.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fryanbekhen%2Ffeserve?ref=badge_shield)
 
 English | [Indonesia](README-id.md)
 
@@ -142,3 +143,6 @@ If you discover a security vulnerability within Feserve, please send an e-mail t
 ## License
 
 This program is free software. You can redistribute it and/or modify it under the terms of the Apache license. Feserve and any contributions are copyright © by Achmad Irianto Eka Putra 2023.
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fryanbekhen%2Ffeserve.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fryanbekhen%2Ffeserve?ref=badge_large)
