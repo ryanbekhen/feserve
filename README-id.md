@@ -141,4 +141,4 @@ Jika Anda menemukan kerentanan keamanan dalam Feserve, silakan kirim email ke ry
 
 ## Lisensi
 
-Program ini adalah perangkat lunak gratis. Anda dapat mendistribusikan ulang dan/atau memodifikasinya di bawah ketentuan lisensi Apache. Feserve dan kontribusi apapun adalah hak cipta © oleh Achmad Irianto Eka Putra 2023.
+Program ini adalah perangkat lunak gratis. Anda dapat mendistribusikan ulang dan/atau memodifikasinya di bawah ketentuan lisensi MIT. Feserve dan kontribusi apapun adalah hak cipta © oleh Achmad Irianto Eka Putra 2023.

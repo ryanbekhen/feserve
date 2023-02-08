@@ -142,7 +142,6 @@ If you discover a security vulnerability within Feserve, please send an e-mail t
 
 ## License
 
-This program is free software. You can redistribute it and/or modify it under the terms of the Apache license. Feserve and any contributions are copyright © by Achmad Irianto Eka Putra 2023.
-
+This program is free software. You can redistribute it and/or modify it under the terms of the MIT license. Feserve and any contributions are copyright © by Achmad Irianto Eka Putra 2023.
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fryanbekhen%2Ffeserve.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fryanbekhen%2Ffeserve?ref=badge_large)
